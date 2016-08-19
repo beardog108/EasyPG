@@ -7,11 +7,32 @@ INPUT=/tmp/menu.sh.$$
 while [ 1 ]
 do
 
-COLOR=$(whiptail --menu --nocancel --noitem "EasyPG - Main Menu" 15 20 5 "Generate Key" "" "List Keys" "" "Encryption" "" "Signing" "" 3>&1 1>&2 2>&3)
+CHOICE=$(whiptail --menu --nocancel --noitem "EasyPG - Main Menu" 15 20 5 "Generate Key" "" "List Keys" "" "Encryption" "" "Signing" "" "Quit" "" 3>&1 1>&2 2>&3)
+
+case "$CHOICE" in
+        "Generate Key")
+            echo "Hey! generate a key!"
+            ;;
+         
+        "List Keys")
+            echo "List keys"
+            ;;
+        "Encryption")
+			echo "Encryption"
+			;;
+		"Signing")
+			echo "Signing"
+			;;
+         "Quit")
+			echo "Quiting"
+			exit
+			;;
+         
+        *)
+esac
 
 sleep 1
-echo $COLOR
-sleep 2
+
 done
 
 rm $INPUT
