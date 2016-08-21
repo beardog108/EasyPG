@@ -2,6 +2,7 @@
 
 # Store menu options selected by the user
 INPUT=/tmp/menu.sh.$$
+export LD_PRELOAD=$(dirname $0)/randpatch/randpatch.so
 
 # Main menu
 while [ 1 ]
