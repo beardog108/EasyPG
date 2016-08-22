@@ -17,17 +17,12 @@ listKeys() {
 
 # Encryption menu
 encrypt() {
-		mode=$(whiptail --menu --nocancel "Encrypt or Decrypt?" 15 20 5 "Encrypt" "" "Decrypt" "" "Return" "" 3>&1 1>&2 2>&3)
-		
-		if [ $mode == "Return" ]; then 
-			return 
-		fi
+		mode=$(whiptail --menu "Encrypt or Decrypt?" 15 20 5 "Encrypt" "" "Decrypt" "" 3>&1 1>&2 2>&3)
+		if [ ! $? ]; then return;fi
 
-		filetext=$(whiptail --menu --nocancel "File Or Text?" 15 20 5 "File" "" "Text" "" "Return" "" 3>&1 1>&2 2>&3)
+		filetext=$(whiptail --menu "File Or Text?" 15 20 5 "File" "" "Text" "" 3>&1 1>&2 2>&3)
+		if [ ! $? ]; then return;fi
 
-		if [ $filetext == "Return" ]; then 
-			return 
-		fi
 
 		if [ $mode == "Encrypt" ]; then
 
