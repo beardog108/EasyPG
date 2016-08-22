@@ -130,7 +130,7 @@ case $SELECTION in
         echo TODO
 	;;
     "about")
-	whiptail --msgbox "EasyPG © 2016 (MIT License) \n \nKevin Froman (ChaosWebs.net) & Duncan Simpson (k7dxs.xyz) \n \n\"Because GPG is too hard\"" 20 50
+	whiptail --msgbox "EasyPG © 2016 (MIT License) \n \nKevin Froman (ChaosWebs.net) & Duncan X. Simpson (www.k7dxs.xyz) \n \n\"Because GPG is too hard\"" 20 50
         ;;
     "exit")
         exit
