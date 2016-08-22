@@ -79,8 +79,20 @@ gen_key() {
     GPGSCRIPT=$(mktemp)
     echo -e "Key-Type: RSA\nSubkey-Type: RSA\nKey-Length: 4096\nSubkey-Length: 4096" > $GPGSCRIPT
     REALNAME=$(whiptail --inputbox "Please enter your full name." 10 60 ${USER^} 3>&1 1>&2 2>&3)
+    if [ $? == 1 ]; then
+	rm $GPGSCRIPT
+	return
+    fi
     EMAIL=$(whiptail --inputbox "Please enter your email address." 10 60 $USER@ 3>&1 1>&2 2>&3)
+    if [ $? == 1 ]; then
+	rm $GPGSCRIPT
+	return
+    fi
     COMMENT=$(whiptail --inputbox "Enter an optional comment for your key. For example, it could be your website or Keybase profile." 10 60 3>&1 1>&2 2>&3)
+    if [ $? == 1 ]; then
+	rm $GPGSCRIPT
+	return
+    fi
     echo -e "Name-Real: $REALNAME\nName-Email: $EMAIL" >> $GPGSCRIPT
     if [ "$COMMENT" != "" ];then echo Name-Comment: $COMMENT >> $GPGSCRIPT;fi
     echo -e "Expire-Date: 0" >> $GPGSCRIPT
