@@ -39,29 +39,29 @@ encrypt() {
 				fi
 			done
 
-			touch /tmp/easypg-text.txt
+			$TEXTFILE=$(mktemp)
 
-			$EDITOR /tmp/easypg-text.txt
+			$EDITOR $TEXTFILE
 
 			whiptail --yesno "Do you want to sign your message?" 15 20
 			if [ $? == 0 ]; then
-				gpg -s -a -e -r $recip /tmp/easypg-text.txt
+				gpg -s -a -e -r $recip $TEXTFILE
 			else
-				gpg -a -e -r $recip /tmp/easypg-text.txt
+				gpg -a -e -r $recip $TEXTFILE
 			fi
 
 			clear
 
-			echo "Message encrypted"
+			echo -e "Encrypted text:\n"
 
-			cat /tmp/easypg-text.txt.asc
+			cat $TEXTFILE.asc
 			echo ""
 			echo "Press enter to continue"
 			read
 
-			shred /tmp/easypg-text.txt
-			rm /tmp/easypg-text.txt
-			rm /tmp/easypg-text.txt.asc
+			shred $TEXTFILE
+			rm $TEXTFILE
+			rm $TEXTFILE.asc
 		else
 			touch /tmp/easypg-text-encrypted.txt
 			$EDITOR /tmp/easypg-text.txt
