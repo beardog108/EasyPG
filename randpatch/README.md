@@ -4,3 +4,6 @@ GPG uses `/dev/random` to provide random data when generating keys. Thing is, th
 ##Compiling
 To compile, simply run:
     gcc -O -Wall -fPIC -shared -o randpatch.so randpatch.c -ldl
+
+##Attribution
+Based on http://unix.stackexchange.com/a/211459/78518
