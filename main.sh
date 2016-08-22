@@ -1,7 +1,74 @@
-#!/bin/bash
+#!/bin/bash -m
 
 export LD_PRELOAD=$(dirname $0)/randpatch/randpatch.so
 export USER=$(whoami) # Just in case it's not already set
+
+# Get the editor, if its not set, set it as nano
+
+if [ "$EDITOR" == "" ]; then
+	EDITOR="nano";
+fi
+
+# List the users keys
+listKeys() {
+	gpg --list-keys | more
+	sleep 1 # sleep for a few seconds so the user doesn't keep pressing enter into the main menu
+}
+
+# Encryption menu
+encrypt() {
+		mode=$(whiptail --menu --nocancel "Encrypt or Decrypt?" 15 20 5 "Encrypt" "" "Decrypt" "" "Return" "" 3>&1 1>&2 2>&3)
+		
+		if [ $mode == "Return" ]; then 
+			return 
+		fi
+
+		filetext=$(whiptail --menu --nocancel "File Or Text?" 15 20 5 "File" "" "Text" "" "Return" "" 3>&1 1>&2 2>&3)
+
+		if [ $filetext == "Return" ]; then 
+			return 
+		fi
+
+		if [ $mode == "Encrypt" ]; then
+
+			while [ 1 ]
+			do
+				recip=$(whiptail --inputbox --nocancel "Recipient id or name:" 15 20 3>&1 1>&2 2>&3)
+				if [ "$recip" != "" ]; then
+					break
+				fi
+			done
+
+			touch /tmp/easypg-text.txt
+
+			$EDITOR /tmp/easypg-text.txt
+
+			whiptail --yesno "Do you want to sign your message?" 15 20
+			if [ $? == 0 ]; then
+				gpg -s -a -e -r $recip /tmp/easypg-text.txt
+			else
+				gpg -a -e -r $recip /tmp/easypg-text.txt
+			fi
+
+			clear
+
+			echo "Message encrypted"
+
+			cat /tmp/easypg-text.txt.asc
+			echo ""
+			echo "Press enter to continue"
+			read
+
+			shred /tmp/easypg-text.txt
+			rm /tmp/easypg-text.txt
+			rm /tmp/easypg-text.txt.asc
+		else
+			touch /tmp/easypg-text-encrypted.txt
+			$EDITOR /tmp/easypg-text.txt
+		fi
+		
+
+}
 
 new_user() {
     whiptail --msgbox "Looks like you haven't used GPG before. Welcome! Let's get you set up." 7 80
@@ -42,14 +109,17 @@ case $SELECTION in
         gen_key
 	;;
     "list")
-        echo TODO
+        listKeys
 	;;
     "enc")
-        echo TODO
+        encrypt
 	;;
     "sign")
         echo TODO
 	;;
+    "about")
+	whiptail --msgbox "EasyPG © 2016 (MIT License) \n \nKevin Froman (https://ChaosWebs.net) \n \n\"Because GPG is too hard\"" 20 50
+        ;;
     "exit")
         exit
 	;;
